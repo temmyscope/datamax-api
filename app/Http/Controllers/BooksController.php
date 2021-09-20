@@ -12,7 +12,6 @@ class BooksController extends Controller
 
     public function getTenBooksFromApi(Request $request)
     {
-        $nameOfBook = $request->query('name');
         $collection = Http::get("https://www.anapioficeandfire.com/api/books")->collect();
         if ($collection->isEmpty()) {
             return response()->json([
@@ -38,11 +37,6 @@ class BooksController extends Controller
         $collection = Http::get("https://www.anapioficeandfire.com/api/books", [
             'name' => $nameOfBook,
         ])->collect();
-        var_dump(
-            Http::get("https://www.anapioficeandfire.com/api/books", [
-                'name' => $nameOfBook,
-            ])
-        );
         if ($collection->isEmpty()) {
             return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
