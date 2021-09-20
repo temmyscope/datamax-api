@@ -82,9 +82,10 @@ class BooksController extends Controller
             'status_code' => 201, 'status' => 'success', 
             'data' => [
                 "book" => [
-                    "name" => $name, "isbn" => $isbn, "authors" => $authors, 
-                    "number_of_pages" => $number_of_pages, "publisher" => $publisher, 
-                    "country" => $country, "release_date" => $release_date
+                    "name" => $books->name, "isbn" => $books->isbn, 
+                    "authors" => $books->authors, "number_of_pages" => $books->number_of_pages, 
+                    "publisher" => $books->publisher, 
+                    "country" => $books->country, "release_date" => $books->release_date
                 ]
             ]
         ]);
@@ -169,7 +170,8 @@ class BooksController extends Controller
             "data" => [
                 'id' => $id, "name" => $update['name'], "isbn" => $update['isbn'], 
                 "authors" => $update['authors'], "number_of_pages" => $update['number_of_pages'], 
-                "publisher" => $update['publisher'], "country" => $country, "release_date" => $release_date, 
+                "publisher" => $update['publisher'], "country" => $update['country'], 
+                "release_date" => $update['release_date'], 
             ]
         ]);
     }
