@@ -17,21 +17,21 @@ class BooksController extends Controller
         ])->collect();
         
         if ($collection->isEmpty()) {
-            return [
+            return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
-            ];
+            ]);
         }
         $collection->transform(function($item, $key){
             $item['number_of_pages'] = $item['numberOfPages'];
             $item['release_date'] = $item['released'];
             return $item;
         });
-        return [
+        return response()->json([
             'status_code' => 200, 'status' => 'success', 
             'data' => $collection->only([
                 "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
             ])->all()
-        ];
+        ]);
     }
 
     public function create(Request $request, JsonDB $jsondb)
@@ -47,7 +47,7 @@ class BooksController extends Controller
         $books->release_date = $request->input('release_date');
         $books->save();
         
-        return [
+        return response()->json([
             'status_code' => 201, 'status' => 'success', 
             'data' => [
                 "book" => [
@@ -56,7 +56,7 @@ class BooksController extends Controller
                     "country" => $country, "release_date" => $release_date
                 ]
             ]
-        ];
+        ]);
     }
 
     public function getFromLocalBase(Request $request, JsonDB $jsondb)
@@ -71,16 +71,16 @@ class BooksController extends Controller
         $booksArray = $books->search($condition, $sortBy='id');
         $collection = collect($booksArray);
         if ($collection->isEmpty()) {
-            return [
+            return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
-            ];
+            ]);
         }
-        return [
+        return response()->json([
             'status_code' => 200, 'status' => 'success', 
             'data' => $collection->only([
                 "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
             ])->all()
-        ];
+        ]);
     }
 
     public function deleteFromBase(Request $request, JsonDB $jsondb, $id)
@@ -90,11 +90,11 @@ class BooksController extends Controller
         $book = $books->findById($id);
         $books->delete($condition);
 
-        return [
+        return response()->json([
             'status_code' => 204, 'status' => 'success', 
             "message" => "The book {$book['name']} was updated successfully",
             "data" => []
-        ];
+        ]);
     }
 
     public function getById(Request $request, JsonDB $jsondb, $id)
@@ -103,20 +103,20 @@ class BooksController extends Controller
         $book = $books->findById($id);
         $collection = collect($book);
         if ($collection->isEmpty()) {
-            return [
+            return response()->json([
                 'status_code' => 200, 'status' => 'success', 
                 "message" => "Book with id: {$id} not found",
                 "data" => []
-            ];
+            ]);
         }
 
-        return [
+        return response()->json([
             'status_code' => 200, 'status' => 'success', 
             "message" => "The book {$book} was updated successfully",
             "data" => $collection->only([
                 "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
             ])
-        ];
+        ]);
     }
 
     public function updateById(Request $request, JsonDB $jsondb, $id)
@@ -133,7 +133,7 @@ class BooksController extends Controller
         $books = $jsondb->setTable('books');
         $books->update($update, ['id' => $id]);
 
-        return [
+        return response()->json([
             'status_code' => 200, 'status' => 'success', 
             "message" => "The book My First Book was updated successfully",
             "data" => [
@@ -141,6 +141,6 @@ class BooksController extends Controller
                 "authors" => $update['authors'], "number_of_pages" => $update['number_of_pages'], 
                 "publisher" => $update['publisher'], "country" => $country, "release_date" => $release_date, 
             ]
-        ];
+        ]);
     }
 }
