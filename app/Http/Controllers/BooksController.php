@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 
 use Illuminate\Http\Request;
-use \Seven\JsonDB\{ Database, Table };
+use \Seven\JsonDB\{ Table };
 use \Seven\Vars\Arrays;
 
 class BooksController extends Controller
@@ -60,7 +60,7 @@ class BooksController extends Controller
         ]);
     }
 
-    public function create(Request $request, Database $jsondb)
+    public function create(Request $request, $jsondb)
     {
         $books = $jsondb->setTable('books');
         $books->id = $books->generateId(Table::TYPE_INT);
@@ -85,7 +85,7 @@ class BooksController extends Controller
         ]);
     }
 
-    public function getFromLocalBase(Request $request, Database $jsondb)
+    public function getFromLocalBase(Request $request, $jsondb)
     {
         $condition = [];
         if( $request->has('name') ) $condition['name'] = $request->input('name');
@@ -109,7 +109,7 @@ class BooksController extends Controller
         ]);
     }
 
-    public function deleteFromBase(Request $request, Database $jsondb, $id)
+    public function deleteFromBase(Request $request, $jsondb, $id)
     {
         $condition = ['id' => $id ];
         $books = $jsondb->setTable('books');
@@ -123,7 +123,7 @@ class BooksController extends Controller
         ]);
     }
 
-    public function getById(Request $request, Database $jsondb, $id)
+    public function getById(Request $request, $jsondb, $id)
     {
         $books = $jsondb->setTable('books');
         $book = $books->findById($id);
@@ -144,7 +144,7 @@ class BooksController extends Controller
         ]);
     }
 
-    public function updateById(Request $request, Database $jsondb, $id)
+    public function updateById(Request $request, $jsondb, $id)
     {
         $update = [];
         if( $request->has('name') ) $update['name'] = $request->input('name');
