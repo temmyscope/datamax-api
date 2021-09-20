@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 
 use Illuminate\Http\Request;
 use \Seven\JsonDB\{JsonDB, Table};
+use \Seven\Vars\Arrays;
 
 class BooksController extends Controller
 {
@@ -14,29 +15,29 @@ class BooksController extends Controller
     {
         $result = curl("https://www.anapioficeandfire.com/api/books")->setMethod('GET')->send();
         $decodedData = json_decode($result, true);
-        $collection = collect($result);
+        $collection = Arrays::init($result);
         if ($collection->isEmpty()) {
             return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
             ]);
         }
-        $collection->transform(function($item, $key){
+        $collection->apply(function($item){
             $item['number_of_pages'] = $item['numberOfPages'];
             $item['release_date'] = $item['released'];
             return $item;
         });
         return response()->json([
-            'status_code' => 200, 'status' => 'success', 'found' => 'true',
-            'data' => $collection->take(10)->only([
+            'status_code' => 200, 'status' => 'success',
+            'data' => $collection->trim(10, 0)->whitelist([
                 "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-            ])->toArray()
+            ])
         ]);
     }
 
     public function fetch(Request $request)
     {
         $nameOfBook = $request->query('name');
-        $collection = collect(
+        $collection = Arrays::safeInit(
             Http::get("https://www.anapioficeandfire.com/api/books", [
                 'name' => $nameOfBook,
             ])->json()
@@ -46,16 +47,16 @@ class BooksController extends Controller
                 "status_code" => 200, "status" => "success", "data" => [],
             ]);
         }
-        $collection->transform(function($item, $key){
+        $collection->apply(function($item){
             $item['number_of_pages'] = $item['numberOfPages'];
             $item['release_date'] = $item['released'];
             return $item;
         });
         return response()->json([
             'status_code' => 200, 'status' => 'success', 
-            'data' => $collection->only([
+            'data' => $collection->whiteList([
                 "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-            ])->toArray()
+            ])
         ]);
     }
 
@@ -94,7 +95,7 @@ class BooksController extends Controller
         
         $books = $jsondb->setTable('books');
         $booksArray = $books->search($condition, $sortBy='id');
-        $collection = collect($booksArray);
+        $collection = Arrays::safeInit($booksArray);
         if ($collection->isEmpty()) {
             return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
@@ -102,7 +103,7 @@ class BooksController extends Controller
         }
         return response()->json([
             'status_code' => 200, 'status' => 'success', 
-            'data' => $collection->only([
+            'data' => $collection->whiteList([
                 "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
             ])->toArray()
         ]);
@@ -126,21 +127,20 @@ class BooksController extends Controller
     {
         $books = $jsondb->setTable('books');
         $book = $books->findById($id);
-        $collection = collect($book);
-        if ($collection->isEmpty()) {
+        if (empty($book)) {
             return response()->json([
                 'status_code' => 200, 'status' => 'success', 
                 "message" => "Book with id: {$id} not found",
                 "data" => []
             ]);
         }
-
+        $collection = Arrays::safeInit([$book]);
         return response()->json([
             'status_code' => 200, 'status' => 'success', 
-            "message" => "The book {$book} was updated successfully",
-            "data" => $collection->only([
+            "message" => "The book {$book->name} was updated successfully",
+            "data" => $collection->whiteList([
                 "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-            ])->toArray()
+            ])[0]
         ]);
     }
 
