@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 
 use Illuminate\Http\Request;
-use \Seven\JsonDB\{ Table };
+use \Seven\JsonDB\{ JsonDB, Table };
 use \Seven\Vars\Arrays;
 
 class BooksController extends Controller
 {
-
+    public function __construct()
+    {
+        $this->jsondb = JsonDB::init(
+            directory: __DIR__.'/../../../storage', database: 'datamax'
+        );
+    }
     public function getTenBooksFromApi(Request $request)
     {
         $result = curl("https://www.anapioficeandfire.com/api/books")->setMethod('GET')->send();
@@ -60,9 +65,9 @@ class BooksController extends Controller
         ]);
     }
 
-    public function create(Request $request, $jsondb)
+    public function create(Request $request)
     {
-        $books = $jsondb->setTable('books');
+        $books = $this->jsondb->setTable('books');
         $books->id = $books->generateId(Table::TYPE_INT);
         $books->name = $request->input('name');
         $books->isbn = $request->input('isbn');
@@ -85,7 +90,7 @@ class BooksController extends Controller
         ]);
     }
 
-    public function getFromLocalBase(Request $request, $jsondb)
+    public function getFromLocalBase(Request $request)
     {
         $condition = [];
         if( $request->has('name') ) $condition['name'] = $request->input('name');
@@ -93,7 +98,7 @@ class BooksController extends Controller
         if( $request->has('publisher') ) $condition['publisher'] = $request->input('publisher');
         if( $request->has('release_date') ) $condition['release_date'] = $request->input('year');
         
-        $books = $jsondb->setTable('books');
+        $books = $this->jsondb->setTable('books');
         $booksArray = $books->search($condition, $sortBy='id');
         $collection = Arrays::safeInit($booksArray);
         if ($collection->isEmpty()) {
@@ -109,10 +114,10 @@ class BooksController extends Controller
         ]);
     }
 
-    public function deleteFromBase(Request $request, $jsondb, $id)
+    public function deleteFromBase(Request $request, $id)
     {
         $condition = ['id' => $id ];
-        $books = $jsondb->setTable('books');
+        $books = $this->jsondb->setTable('books');
         $book = $books->findById($id);
         $books->delete($condition);
 
@@ -123,9 +128,9 @@ class BooksController extends Controller
         ]);
     }
 
-    public function getById(Request $request, $jsondb, $id)
+    public function getById(Request $request, $id)
     {
-        $books = $jsondb->setTable('books');
+        $books = $this->jsondb->setTable('books');
         $book = $books->findById($id);
         if (empty($book)) {
             return response()->json([
@@ -144,7 +149,7 @@ class BooksController extends Controller
         ]);
     }
 
-    public function updateById(Request $request, $jsondb, $id)
+    public function updateById(Request $request, $id)
     {
         $update = [];
         if( $request->has('name') ) $update['name'] = $request->input('name');
@@ -155,7 +160,7 @@ class BooksController extends Controller
         if( $request->has('publisher') ) $update['publisher'] = $request->input('publisher');
         if( $request->has('release_date') ) $update['release_date'] = $request->input('release_date');
         $condition = ['id' => $id ];
-        $books = $jsondb->setTable('books');
+        $books = $this->jsondb->setTable('books');
         $books->update($update, ['id' => $id]);
 
         return response()->json([
