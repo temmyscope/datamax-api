@@ -12,7 +12,11 @@ class BooksController extends Controller
 
     public function getTenBooksFromApi(Request $request)
     {
-        $collection = Http::get("https://www.anapioficeandfire.com/api/books")->collect();
+        $collection = collect(
+            curl("https://www.anapioficeandfire.com/api/books")
+            ->setMethod('GET')
+            ->send()
+        );
         if ($collection->isEmpty()) {
             return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
