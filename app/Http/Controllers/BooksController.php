@@ -57,7 +57,7 @@ class BooksController extends Controller
             'status_code' => 200, 'status' => 'success', 
             'data' => $collection->only([
                 "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-            ])->all()
+            ])->toArray()
         ]);
     }
 
@@ -106,7 +106,7 @@ class BooksController extends Controller
             'status_code' => 200, 'status' => 'success', 
             'data' => $collection->only([
                 "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-            ])->all()
+            ])->toArray()
         ]);
     }
 
@@ -142,7 +142,7 @@ class BooksController extends Controller
             "message" => "The book {$book} was updated successfully",
             "data" => $collection->only([
                 "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-            ])
+            ])->toArray()
         ]);
     }
 
