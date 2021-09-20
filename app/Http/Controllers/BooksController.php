@@ -117,11 +117,12 @@ class BooksController extends Controller
 
     public function deleteFromBase(Request $request, $id)
     {
-        $condition = ['id' => (int)$id ];
+        $id  = (int)$id;
+        $condition = ['id' => $id ];
         $books = $this->jsondb->setTable('books');
-        $book = $books->findById((int)$id);
+        $book = $books->findById($id);
         $books->delete($condition);
-        $deleted= $book['name'] ?? $book->name ?? 'unknown';
+        $deleted= $book->name ?? 'unknown';
         
         return response()->json([
             'status_code' => 204, 'status' => 'success', 
@@ -132,8 +133,9 @@ class BooksController extends Controller
 
     public function getById(Request $request, $id)
     {
+        $id  = (int)$id;
         $books = $this->jsondb->setTable('books');
-        $book = $books->findById((int)$id);
+        $book = $books->findById($id);
         if (empty($book)) {
             return response()->json([
                 'status_code' => 200, 'status' => 'success', 
@@ -153,6 +155,7 @@ class BooksController extends Controller
     public function updateById(Request $request, $id)
     {
         $update = [];
+        $id  = (int) $id;
         if( $request->has('name') ) $update['name'] = $request->input('name');
         if( $request->has('isbn') ) $update['isbn'] = $request->input('isbn');
         if( $request->has('authors') ) $update['authors'] = $request->input('authors');
