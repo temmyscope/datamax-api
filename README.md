@@ -14,7 +14,6 @@ composer install
 
 ### Note: library I'm using was created by Me; so the choice there was deliberate
 
-
     - Filtering books
 
 => You can also include filter parameters in your request to the books endpoint by including parameters in the query string.
