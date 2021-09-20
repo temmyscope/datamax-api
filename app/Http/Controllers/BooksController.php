@@ -111,7 +111,7 @@ class BooksController extends Controller
             'status_code' => 200, 'status' => 'success', 
             'data' => $collection->whiteList([
                 "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-            ])->toArray()
+            ])
         ]);
     }
 

@@ -1,3 +1,4 @@
+####
 POST https://datamax-api.herokuapp.com/api/v1/books
 content-type: application/json
 
@@ -10,3 +11,6 @@ content-type: application/json
     "publisher":"Acme Books",
     "release_date": "2019-08-01"
 }
+
+####
+GET https://datamax-api.herokuapp.com/api/v1/books
