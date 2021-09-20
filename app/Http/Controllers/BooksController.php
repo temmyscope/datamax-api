@@ -26,7 +26,6 @@ class BooksController extends Controller
             $item['release_date'] = $item['released'];
             return $item;
         });
-        //contains('key', 'value')
         return [
             'status_code' => 200, 'status' => 'success', 
             'data' => $collection->only([
@@ -37,17 +36,17 @@ class BooksController extends Controller
 
     public function create(Request $request, JsonDB $jsondb)
     {
-        //$books = $jsondb->setTable('books');
-        //$books->id = $books->generateId(Table::TYPE_INT);
-        //$books->name = $request->input('name');
-        //$books->isbn = $request->input('isbn');
-        //$books->authors = $request->input('authors');
-        //$books->country = $request->input('country');
-        //$books->number_of_pages = $request->input('number_of_pages');
-        //$books->publisher = $request->input('publisher');
-        //$books->release_date = $request->input('release_date');
-        //$books->save();
-        //
+        $books = $jsondb->setTable('books');
+        $books->id = $books->generateId(Table::TYPE_INT);
+        $books->name = $request->input('name');
+        $books->isbn = $request->input('isbn');
+        $books->authors = $request->input('authors');
+        $books->country = $request->input('country');
+        $books->number_of_pages = $request->input('number_of_pages');
+        $books->publisher = $request->input('publisher');
+        $books->release_date = $request->input('release_date');
+        $books->save();
+        
         return [
             'status_code' => 201, 'status' => 'success', 
             'data' => [
@@ -60,20 +59,17 @@ class BooksController extends Controller
         ];
     }
 
-    public function getFromLocalBase(Request $request)
+    public function getFromLocalBase(Request $request, JsonDB $jsondb)
     {
         $condition = [];
         if( $request->has('name') ) $condition['name'] = $request->input('name');
         if( $request->has('country') ) $condition['country'] = $request->input('country');
         if( $request->has('publisher') ) $condition['publisher'] = $request->input('publisher');
-        if( $request->has('release_date') ) $condition['release_date'] = $request->input('release_date');
+        if( $request->has('release_date') ) $condition['release_date'] = $request->input('year');
         
-        //search using any of this
-        //$books = JsonDB::init('datamax', 'books');
-        /*
-        $books->find();
-        */
-        $collection = collect([]);//get from localdb
+        $books = $jsondb->setTable('books');
+        $booksArray = $books->search($condition, $sortBy='id');
+        $collection = collect($booksArray);
         if ($collection->isEmpty()) {
             return [
                 "status_code" => 200, "status" => "success", "data" => [],
@@ -82,42 +78,48 @@ class BooksController extends Controller
         return [
             'status_code' => 200, 'status' => 'success', 
             'data' => $collection->only([
-                "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
+                "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
             ])->all()
         ];
     }
 
-    public function deleteFromBase(Request $request, $id)
+    public function deleteFromBase(Request $request, JsonDB $jsondb, $id)
     {
         $condition = ['id' => $id ];
+        $books = $jsondb->setTable('books');
+        $book = $books->findById($id);
+        $books->delete($condition);
 
         return [
             'status_code' => 204, 'status' => 'success', 
-            "message" => "The book {$book} was updated successfully",
-            "data" => [
-                'id' => $id, "name" => $update['name'], "isbn" => $update['isbn'], 
-                "authors" => $update['authors'], "number_of_pages" => $update['number_of_pages'], 
-                "publisher" => $update['publisher'], "country" => $country, "release_date" => $release_date, 
-            ]
+            "message" => "The book {$book['name']} was updated successfully",
+            "data" => []
         ];
     }
 
-    public function getById(Request $request, $id)
+    public function getById(Request $request, JsonDB $jsondb, $id)
     {
-        $condition = ['id' => $id ];
-        //book by id
+        $books = $jsondb->setTable('books');
+        $book = $books->findById($id);
+        $collection = collect($book);
+        if ($collection->isEmpty()) {
+            return [
+                'status_code' => 200, 'status' => 'success', 
+                "message" => "Book with id: {$id} not found",
+                "data" => []
+            ];
+        }
+
         return [
             'status_code' => 200, 'status' => 'success', 
             "message" => "The book {$book} was updated successfully",
-            "data" => [
-                'id' => $id, "name" => $update['name'], "isbn" => $update['isbn'], 
-                "authors" => $update['authors'], "number_of_pages" => $update['number_of_pages'], 
-                "publisher" => $update['publisher'], "country" => $country, "release_date" => $release_date, 
-            ]
+            "data" => $collection->only([
+                "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
+            ])
         ];
     }
 
-    public function updateById(Request $request, $id)
+    public function updateById(Request $request, JsonDB $jsondb, $id)
     {
         $update = [];
         if( $request->has('name') ) $update['name'] = $request->input('name');
@@ -128,7 +130,9 @@ class BooksController extends Controller
         if( $request->has('publisher') ) $update['publisher'] = $request->input('publisher');
         if( $request->has('release_date') ) $update['release_date'] = $request->input('release_date');
         $condition = ['id' => $id ];
-
+        $books = $jsondb->setTable('books');
+        $books->update($update, ['id' => $id]);
+        
         return [
             'status_code' => 200, 'status' => 'success', 
             "message" => "The book My First Book was updated successfully",
