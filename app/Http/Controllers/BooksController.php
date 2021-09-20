@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\{
-    Http, Request,
+    Http, 
 };
+use Illuminate\Http\Request;
 use \Seven\JsonDB\{JsonDB, Table};
 
 class BooksController extends Controller
@@ -132,7 +133,7 @@ class BooksController extends Controller
         $condition = ['id' => $id ];
         $books = $jsondb->setTable('books');
         $books->update($update, ['id' => $id]);
-        
+
         return [
             'status_code' => 200, 'status' => 'success', 
             "message" => "The book My First Book was updated successfully",
