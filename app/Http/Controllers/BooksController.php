@@ -119,9 +119,9 @@ class BooksController extends Controller
     {
         $condition = ['id' => (int)$id ];
         $books = $this->jsondb->setTable('books');
-        $book = $books->findById($id);
+        $book = $books->findById((int)$id);
         $books->delete($condition);
-        $deleted= $book['name'] ?? 'unknown';
+        $deleted= $book['name'] ?? $book->name ?? 'unknown';
         
         return response()->json([
             'status_code' => 204, 'status' => 'success', 
@@ -143,8 +143,7 @@ class BooksController extends Controller
         }
         $collection = Arrays::safeInit([$book]);
         return response()->json([
-            'status_code' => 200, 'status' => 'success', 
-            "message" => "The book {$book->name} was updated successfully",
+            'status_code' => 200, 'status' => 'success',
             "data" => $collection->whiteList([
                 "id", "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
             ])[0]
