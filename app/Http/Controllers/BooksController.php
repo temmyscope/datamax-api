@@ -12,11 +12,9 @@ class BooksController extends Controller
 
     public function getTenBooksFromApi(Request $request)
     {
-        $collection = collect(
-            json_decode(curl("https://www.anapioficeandfire.com/api/books")
-            ->setMethod('GET')
-            ->send(), true)
-        );
+        $result = curl("https://www.anapioficeandfire.com/api/books")->setMethod('GET')->send();
+        $decodedData = json_decode($result, true);
+        $collection = collect($result);
         if ($collection->isEmpty()) {
             return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
@@ -28,7 +26,7 @@ class BooksController extends Controller
             return $item;
         });
         return response()->json([
-            'status_code' => 200, 'status' => 'success', 
+            'status_code' => 200, 'status' => 'success', 'found' => 'true',
             'data' => $collection->take(10)->only([
                 "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
             ])->toArray()
