@@ -14,6 +14,8 @@
 
 $router->group(['prefix' => 'api'],  function() use ($router){
     
+    $router->get('/', 'BooksController@getTenBooksFromApi');
+
     $router->get('/external-books', 'BooksController@fetch');
 
     $router->get('/v1/books', 'BooksController@getFromLocalBase');

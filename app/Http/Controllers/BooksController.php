@@ -9,13 +9,40 @@ use \Seven\JsonDB\{JsonDB, Table};
 
 class BooksController extends Controller
 {
+
+    public function getTenBooksFromApi(Request $request)
+    {
+        $nameOfBook = $request->query('name');
+        $collection = Http::get("https://www.anapioficeandfire.com/api/books")->collect();
+        if ($collection->isEmpty()) {
+            return response()->json([
+                "status_code" => 200, "status" => "success", "data" => [],
+            ]);
+        }
+        $collection->transform(function($item, $key){
+            $item['number_of_pages'] = $item['numberOfPages'];
+            $item['release_date'] = $item['released'];
+            return $item;
+        });
+        return response()->json([
+            'status_code' => 200, 'status' => 'success', 
+            'data' => $collection->only([
+                "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
+            ])->take(10)
+        ]);
+    }
+
     public function fetch(Request $request)
     {
-        $nameOfBook = $request->input('name');
+        $nameOfBook = $request->query('name');
         $collection = Http::get("https://www.anapioficeandfire.com/api/books", [
             'name' => $nameOfBook,
         ])->collect();
-        
+        var_dump(
+            Http::get("https://www.anapioficeandfire.com/api/books", [
+                'name' => $nameOfBook,
+            ])
+        );
         if ($collection->isEmpty()) {
             return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
