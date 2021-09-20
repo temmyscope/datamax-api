@@ -1,6 +1,7 @@
 ####
 POST https://datamax-api.herokuapp.com/api/v1/books
 content-type: application/json
+
 {
     "name": "My First Book",
     "isbn": "123-3213243567",
@@ -21,7 +22,9 @@ GET https://datamax-api.herokuapp.com/api/v1/books
 GET https://datamax-api.herokuapp.com/api/external-books
 
 ####
-PATCH https://datamax-api.herokuapp.com/api/v1/books/2
+PATCH https://datamax-api.herokuapp.com/api/v1/books/1
+content-type: application/json
+
 {
     "name": "My First Book",
     "isbn": "123-3213243567",
