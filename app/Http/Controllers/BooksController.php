@@ -26,9 +26,9 @@ class BooksController extends Controller
         });
         return response()->json([
             'status_code' => 200, 'status' => 'success', 
-            'data' => $collection->only([
+            'data' => $collection->take(10)->only([
                 "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-            ])->take(10)
+            ])->toArray()
         ]);
     }
 
