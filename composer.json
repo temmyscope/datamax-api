@@ -8,7 +8,7 @@
         "php": "^7.3|^8.0",
         "guzzlehttp/guzzle": "^7.3",
         "laravel/lumen-framework": "^8.0",
-        "sevens/jsondb": "^0.1.1"
+        "sevens/jsondb": "^0.1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

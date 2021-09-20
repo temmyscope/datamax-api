@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfeadfa017d6a2d46db812c453edff4e",
+    "content-hash": "9c19ea1384b4edf357adc6903fcde5d0",
     "packages": [
         {
             "name": "brick/math",
@@ -3158,16 +3158,16 @@
         },
         {
             "name": "sevens/jsondb",
-            "version": "v0.1.1",
+            "version": "v0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/temmyscope/jsondb.git",
-                "reference": "a7bbc7caa2f64c4441d41ae33f5363f8f7c1bbd1"
+                "reference": "690739a9180297ee538ccae5d2653ae72444f840"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/temmyscope/jsondb/zipball/a7bbc7caa2f64c4441d41ae33f5363f8f7c1bbd1",
-                "reference": "a7bbc7caa2f64c4441d41ae33f5363f8f7c1bbd1",
+                "url": "https://api.github.com/repos/temmyscope/jsondb/zipball/690739a9180297ee538ccae5d2653ae72444f840",
+                "reference": "690739a9180297ee538ccae5d2653ae72444f840",
                 "shasum": ""
             },
             "require": {
@@ -3207,9 +3207,9 @@
             ],
             "support": {
                 "issues": "https://github.com/temmyscope/jsondb/issues",
-                "source": "https://github.com/temmyscope/jsondb/tree/v0.1.1"
+                "source": "https://github.com/temmyscope/jsondb/tree/v0.1.0"
             },
-            "time": "2021-09-20T11:26:15+00:00"
+            "time": "2021-09-20T21:59:31+00:00"
         },
         {
             "name": "sevens/vars",
