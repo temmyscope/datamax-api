@@ -17,15 +17,9 @@ class JsonDBMiddleware
      */
     public function handle($request, Closure $next)
     {
-        JsonDB::make(
-            directory: __DIR__.'/../../../storage', database: 'datamax'
-        );
         $jsondb = JsonDB::init(
             directory: __DIR__.'/../../../storage', database: 'datamax'
         );
-        $jsondb->createTable('books', [
-            "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
-        ]);
         return $next($request, $jsondb);
     }
 }
