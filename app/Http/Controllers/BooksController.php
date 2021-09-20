@@ -28,7 +28,7 @@ class BooksController extends Controller
         });
         return response()->json([
             'status_code' => 200, 'status' => 'success',
-            'data' => $collection->trim(10, 0)->whitelist([
+            'data' => Arrays::init($collection->trim(10, 0))->whitelist([
                 "name", "isbn", "authors", "number_of_pages", "publisher", "country", "release_date"
             ])
         ]);
