@@ -15,7 +15,7 @@ class BooksController extends Controller
     {
         $result = curl("https://www.anapioficeandfire.com/api/books")->setMethod('GET')->send();
         $decodedData = json_decode($result, true);
-        $collection = Arrays::init($result);
+        $collection = Arrays::init($result['data']);
         if ($collection->isEmpty()) {
             return response()->json([
                 "status_code" => 200, "status" => "success", "data" => [],
