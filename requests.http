@@ -22,7 +22,7 @@ GET https://datamax-api.herokuapp.com/api/v1/books
 GET https://datamax-api.herokuapp.com/api/v1/books/1
 
 ####
-GET https://datamax-api.herokuapp.com/api/external-books
+GET https://datamax-api.herokuapp.com/api/external-books?name=A+game+of+thrones
 
 ####
 PATCH https://datamax-api.herokuapp.com/api/v1/books/1

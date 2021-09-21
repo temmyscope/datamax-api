@@ -9,6 +9,9 @@
     composer install
 ```
 
+    - Configure Environment
+**Needed Environment Variables are in the .env.example file**
+
     - Setting Up Server
 ***Point Apache or Server of Choice to public folder***
 
