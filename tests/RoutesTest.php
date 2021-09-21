@@ -75,8 +75,6 @@ class RoutesTest extends TestCase
             'status_code' => 200, "message"
         ]);
 
-        $this->json("DELETE", '/api/v1/books/1')->seeJson([ 
-            'status_code' => 204 
-        ]);
+        $this->json("DELETE", '/api/v1/books/1')->seeJson(['status_code' => 204]);
     }
 }
