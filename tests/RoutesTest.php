@@ -72,8 +72,8 @@ class RoutesTest extends TestCase
             "publisher" => "Acme Books",
             "release_date" => "2019-08-01"
         ])->seeJson([ 
-            'status_code' => 200, "message"
-        ]);
+            'status_code' => 200
+        ])->seeJsonStructure(["message"]);
 
         $this->json("DELETE", '/api/v1/books/1')->seeJson(['status_code' => 204]);
     }
