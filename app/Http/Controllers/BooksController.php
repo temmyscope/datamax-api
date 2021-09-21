@@ -16,6 +16,7 @@ class BooksController extends Controller
             directory: __DIR__.'/../../../storage', database: 'datamax'
         );
     }
+
     public function getTenBooksFromApi(Request $request)
     {
         $result = curl("https://www.anapioficeandfire.com/api/books")->setMethod('GET')->send();
@@ -126,7 +127,7 @@ class BooksController extends Controller
         
         return response()->json([
             'status_code' => 204, 'status' => 'success', 
-            "message" => "The book {$deleted} was updated successfully",
+            "message" => "The book {$deleted} was deleted successfully",
             "data" => []
         ]);
     }
@@ -165,7 +166,7 @@ class BooksController extends Controller
         if( $request->has('release_date') ) $update['release_date'] = $request->input('release_date');
         $condition = ['id' => $id ];
         $books = $this->jsondb->setTable('books');
-        $books->update($update, ['id' => $id]);
+        $books->update($update, $condition);
 
         return response()->json([
             'status_code' => 200, 'status' => 'success', 
